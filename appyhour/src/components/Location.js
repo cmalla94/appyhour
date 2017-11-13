@@ -24,7 +24,15 @@ export default class Location extends Component {
     this.restaurantRef = firebase.database().ref().
                           child('Restaurants')
     this.state = {
-      data: []
+      data: [],
+      id: '',
+      startDay: '',
+      endDay: '',
+      startTime: '',
+      endTime: '',
+      name: '',
+      lat: '',
+      long: ''
     }
   }
 
@@ -38,6 +46,10 @@ export default class Location extends Component {
       snapshot.forEach((child) => {
         restaurants.push({
           name: child.val().name,
+          startDay: child.val().startDay,
+          endDay: child.val().endDay,
+          startTime: child.val().startTime,
+          endTime: child.val().endTime,
           id: child.key
         })
       })
@@ -64,10 +76,19 @@ export default class Location extends Component {
         <FlatList
           data={this.state.data}
           keyExtractor={this._keyExtractor}
-          renderItem={this._renderItem
+          renderItem={
             ({item}) => {
               return (
-                <TouchableHighlight onPress={() => navigate('Restaurant')}>
+                <TouchableHighlight onPress={() =>
+                  navigate('Restaurant', {id: item.id,
+                    name: item.name,
+                    startDay: item.startDay,
+                    endDay: item.endDay,
+                    startTime: item.startTime,
+                    endTime: item.endTime,
+                    lat: item.lat,
+                    long: item.long
+                    })}>
                   <View style={styles.li}>
                     <Text style={styles.liText}>{item.name}</Text>
                   </View>
