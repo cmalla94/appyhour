@@ -5,10 +5,12 @@ import {
   Text,
   FlatList,
   StyleSheet,
+  Button,
 } from 'react-native'
 import firebase from './firebase'
 
-export default class Restaurant extends Component {
+
+
   render(){
 
     return(
@@ -16,11 +18,11 @@ export default class Restaurant extends Component {
         <FlatList
           data={[
             {key: this.props.navigation.state.params.id},
-            {key: this.props.navigation.state.params.name},
+            {name: this.props.navigation.state.params.name},
             {key: this.props.navigation.state.params.startDay},
             {key: this.props.navigation.state.params.endDay},
             {key: this.props.navigation.state.params.startTime},
-            {key: this.props.navigation.state.params.endTime}
+            {key: this.props.navigation.state.params.endTime},
           ]}
           renderItem={
             ({item}) => {
