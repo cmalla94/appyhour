@@ -10,7 +10,7 @@ import {
 import firebase from './firebase'
 
 
-
+export default class Restaurant extends Component {
   render(){
 
     return(
@@ -18,7 +18,7 @@ import firebase from './firebase'
         <FlatList
           data={[
             {key: this.props.navigation.state.params.id},
-            {name: this.props.navigation.state.params.name},
+            {key: this.props.navigation.state.params.name},
             {key: this.props.navigation.state.params.startDay},
             {key: this.props.navigation.state.params.endDay},
             {key: this.props.navigation.state.params.startTime},
