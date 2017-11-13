@@ -6,9 +6,11 @@ import {
   FlatList,
   StyleSheet,
   View,
+  TouchableHighlight,
 
 } from 'react-native'
 import firebase from '../firebase'
+import {StackNavigator} from 'react-navigation'
 import ListItem from './ListItem'
 import Restaurant from './Restaurant'
 
@@ -17,11 +19,10 @@ export default class Location extends Component {
 
   constructor(props){
     super(props)
-    const {navigate} = this.props.navigation
+
     //this is the json of the Restaurants table in firebase db
     this.restaurantRef = firebase.database().ref().
                           child('Restaurants')
-
     this.state = {
       data: []
     }
@@ -46,31 +47,34 @@ export default class Location extends Component {
       this.setState({data: restaurants})
     })
   }
+
   componentDidMount(){
     this.listenForRestaurants(this.restaurantRef)
   }
+
   _keyExtractor(item){
     console.log(item.id)
     return item.id
   }
-  _renderItem({item}){
-    itemPress = () => {navigate('Restaurant') }
-    return(
-      <ListItem item={item} onPress={itemPress} />
-
-    )
-  }
-
-
 
   render(){
-
+    const { navigate } = this.props.navigation
     return(
       <View style={styles.container}>
         <FlatList
           data={this.state.data}
           keyExtractor={this._keyExtractor}
-          renderItem={this._renderItem} style={styles.listview}
+          renderItem={this._renderItem
+            ({item}) => {
+              return (
+                <TouchableHighlight onPress={() => navigate('Restaurant')}>
+                  <View style={styles.li}>
+                    <Text style={styles.liText}>{item.name}</Text>
+                  </View>
+                </TouchableHighlight>
+              )
+            }
+          } style={styles.listview}
         />
       </View>
 
@@ -88,5 +92,18 @@ const styles = StyleSheet.create({
   },
   listview: {
     flex: 1,
+  },
+  liText: {
+    color: '#333',
+    fontSize: 16,
+  },
+  li: {
+    backgroundColor: '#fff',
+    borderBottomColor: '#eee',
+    borderColor: 'transparent',
+    borderWidth: 1,
+    paddingLeft: 16,
+    paddingTop: 14,
+    paddingBottom: 16,
   },
 })

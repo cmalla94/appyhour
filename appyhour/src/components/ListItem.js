@@ -5,12 +5,16 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import {StackNavigator} from 'react-navigation'
+import Restaurant from './Restaurant'
+
 
 
 export default class ListItem extends Component {
   render() {
+    const { navigate } = this.props.navigation
     return (
-      <TouchableHighlight onPress={this.props.onPress}>
+      <TouchableHighlight onPress={() => navigate('Restaurant')}>
         <View style={styles.li}>
           <Text style={styles.liText}>{this.props.item.name}</Text>
         </View>

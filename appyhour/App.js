@@ -8,6 +8,7 @@ import {StackNavigator} from 'react-navigation'
 import HomeScreen from './src/components/HomeScreen'
 import Location from './src/components/Location'
 import Rating from './src/components/Rating'
+import Restaurant from './src/components/Restaurant'
 
 const RootNavigator = StackNavigator({
   Home: {
@@ -18,7 +19,10 @@ const RootNavigator = StackNavigator({
   },
   Rating: {
     screen: Rating
-  }
+  },
+  Restaurant: {
+    screen: Restaurant
+  },
 })
 
 
