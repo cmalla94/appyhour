@@ -50,7 +50,9 @@ export default class Location extends Component {
           endDay: child.val().endDay,
           startTime: child.val().startTime,
           endTime: child.val().endTime,
-          id: child.key
+          id: child.key,
+          lat: child.val().lat,
+          long: child.val().long
         })
       })
       //each time this function runs
@@ -80,14 +82,15 @@ export default class Location extends Component {
             ({item}) => {
               return (
                 <TouchableHighlight onPress={() =>
-                  navigate('Restaurant', {id: item.id,
-                    name: item.name,
-                    startDay: item.startDay,
-                    endDay: item.endDay,
-                    startTime: item.startTime,
-                    endTime: item.endTime,
-                    lat: item.lat,
-                    long: item.long
+                  navigate('Restaurant', {
+                      id: item.id,
+                      name: item.name,
+                      startDay: item.startDay,
+                      endDay: item.endDay,
+                      startTime: item.startTime,
+                      endTime: item.endTime,
+                      lat: item.lat,
+                      long: item.long
                     })}>
                   <View style={styles.li}>
                     <Text style={styles.liText}>{item.name}</Text>

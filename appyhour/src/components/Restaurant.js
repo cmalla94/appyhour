@@ -8,11 +8,27 @@ import {
   Button,
 } from 'react-native'
 import firebase from './firebase'
+import {StackNavigator} from 'react-navigation'
+import MapImage from './MapImage'
 
 
 export default class Restaurant extends Component {
-  render(){
+  constructor(props){
+    super(props)
+    this.state = {
+      lat: '',
+      _long: '',
+    }
+  }
 
+  componentDidMount(){
+    this.setState({
+      lat: this.props.navigation.state.params.lat,
+      _long: this.props.navigation.state.params.long
+    })
+  }
+  render(){
+    const { navigate } = this.props.navigation
     return(
       <View style={styles.container}>
         <FlatList
@@ -23,6 +39,8 @@ export default class Restaurant extends Component {
             {key: this.props.navigation.state.params.endDay},
             {key: this.props.navigation.state.params.startTime},
             {key: this.props.navigation.state.params.endTime},
+            {key: this.props.navigation.state.params.lat},
+            {key: this.props.navigation.state.params.long}
           ]}
           renderItem={
             ({item}) => {
@@ -34,6 +52,12 @@ export default class Restaurant extends Component {
             }
           } style={styles.listview}
         />
+        <Button onPress={() =>
+          navigate('MapImage',{
+            lat: this.state.lat,
+            _long: this.state._long
+          })}
+          title="Show me Map"/>
 
 
       </View>

@@ -9,7 +9,7 @@ import HomeScreen from './src/components/HomeScreen'
 import Location from './src/components/Location'
 import Rating from './src/components/Rating'
 import Restaurant from './src/components/Restaurant'
-
+import MapImage from './src/components/MapImage'
 const RootNavigator = StackNavigator({
   Home: {
     screen: HomeScreen,
@@ -22,6 +22,9 @@ const RootNavigator = StackNavigator({
   },
   Restaurant: {
     screen: Restaurant
+  },
+  MapImage: {
+    screen: MapImage
   },
 })
 
