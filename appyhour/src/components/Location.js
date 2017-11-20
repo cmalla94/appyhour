@@ -10,20 +10,11 @@ import {
   Button,
   Image,
 } from 'react-native'
-import {
-  Content,
-  Card,
-  CardItem,
-  Thumbnail,
-  Icon,
-  Left,
-  Body,
-  Right,
-} from 'native-base'
 import firebase from '../firebase'
 import {StackNavigator} from 'react-navigation'
-import ListItem from './ListItem'
+import RestaurantItem from './RestaurantItem'
 import Restaurant from './Restaurant'
+import Test from './Test'
 
 
 export default class ByLocation extends Component {
@@ -46,7 +37,6 @@ export default class ByLocation extends Component {
       long: '',
       myLat: '',
       myLong: '',
-      imgPath: '',
       diningIcon: 'https://firebasestorage.googleapis.com/v0/b/appyhour-113cc.appspot.com/o/diningIcon.png?alt=media&token=af5d0eef-7c7b-4bce-82ba-d24aa0ad4d7d',
 
     }
@@ -89,21 +79,23 @@ export default class ByLocation extends Component {
       myLong: this.props.navigation.state.params.myLong
     })
   }
-
   _keyExtractor(item){
     return item.id
   }
-
-
   render(){
     const { navigate } = this.props.navigation
-    // let text = this.state.myLat + ' ' + this.state.myLong //
-    // let distance = geolib.getDistance(
-    //   {latitude: this.state.myLat, longitude: this.state.myLong },
-    //   {latitude: this.props.navigation.state.params.lat, longitude: this.props.navigation.state.params.long}
-    // )
-    // distance = Math.round(distance/1000)
-    // let hours = this.props.navigation.state.params.startTime + ' to ' + this.props.navigation.state.params.endTime;
+    let distance = (myLat, myLong, lat, _long) => {
+      let theDist = geolib.getDistance(
+        {latitude: myLat, longitude: myLong}, {latitude: lat, longitude: _long}
+      )
+      return Math.round(theDist/1000) + ' KM'
+      console.log(theDist);
+    }
+    let hours = (start, end) => {
+      theHours = start + ' to ' + end
+      return theHours
+    }
+
     return(
       <View style={styles.container}>
         <FlatList
@@ -111,26 +103,39 @@ export default class ByLocation extends Component {
           keyExtractor={this._keyExtractor}
           renderItem={
             ({item}) => {
+              let distText = distance(
+                this.state.myLat, this.state.myLong, item.lat, item.long)
+              let hourText = hours(item.startTime, item.endTime)
               return (
                 //to be optimized by only passing in the id to Restaurant component
-                <TouchableHighlight onPress={() =>
-                  navigate('Restaurant', {
-                      id: item.id,
-                      name: item.name,
-                      startDay: item.startDay,
-                      endDay: item.endDay,
-                      startTime: item.startTime,
-                      endTime: item.endTime,
-                      lat: item.lat,
-                      long: item.long,
-                      myLat: this.state.myLat,
-                      myLong: this.state.myLong,
-                      imgPath: item.imgPath,
-                    })}>
-                  <View style={styles.li}>
-                    <Text style={styles.liText}>{item.name}</Text>
-                  </View>
-                </TouchableHighlight>
+                <RestaurantItem
+                  navigation={navigate}
+                  name={item.name}
+                  icon={this.state.diningIcon}
+                  img={item.imgPath}
+                  distance={distText}
+                  hours={hourText}
+                  itemPress={() => {navigate('Test')}}
+                />
+
+                // <TouchableHighlight onPress={() =>
+                //   navigate('Restaurant', {
+                //       id: item.id,
+                //       name: item.name,
+                //       startDay: item.startDay,
+                //       endDay: item.endDay,
+                //       startTime: item.startTime,
+                //       endTime: item.endTime,
+                //       lat: item.lat,
+                //       long: item.long,
+                //       myLat: this.state.myLat,
+                //       myLong: this.state.myLong,
+                //       imgPath: item.imgPath,
+                //     })}>
+                //   <View style={styles.li}>
+                //     <Text style={styles.liText}>{item.name}</Text>
+                //   </View>
+                // </TouchableHighlight>
               )
             }
           } style={styles.listview}

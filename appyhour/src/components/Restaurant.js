@@ -44,8 +44,6 @@ export default class Restaurant extends Component {
       lat: this.props.navigation.state.params.lat,
       _long: this.props.navigation.state.params.long
     })
-    this.getImage(this.props.navigation.state.params.imgPath)
-    console.log(this.props.navigation.state.params.imgPath);
   }
   //method to take in imgPath passed in from Location component
   getImage(path) {
@@ -59,12 +57,13 @@ export default class Restaurant extends Component {
 
   render(){
     const { navigate } = this.props.navigation
-    let distance = geolib.getDistance(
-      {latitude: this.props.navigation.state.params.myLat, longitude: this.props.navigation.state.params.myLong },
-      {latitude: this.props.navigation.state.params.lat, longitude: this.props.navigation.state.params.long}
-    )
-    distance = Math.round(distance/1000)
+    // let distance = geolib.getDistance(
+    //   {latitude: this.props.navigation.state.params.myLat, longitude: this.props.navigation.state.params.myLong },
+    //   {latitude: this.props.navigation.state.params.lat, longitude: this.props.navigation.state.params.long}
+    // )
+    // distance = Math.round(distance/1000)
     let hours = this.props.navigation.state.params.startTime + ' to ' + this.props.navigation.state.params.endTime;
+    let img = this.props.navigation.state.params.img
     return(
       <View style={styles.container}>
         <Content>
@@ -78,11 +77,11 @@ export default class Restaurant extends Component {
               </Left>
             </CardItem>
             <CardItem cardBody>
-              <Image source={{uri: this.state.img}} style={{height: 200, width: null, flex: 1}}/>
+              <Image source={{uri: img}} style={{height: 200, width: null, flex: 1}}/>
             </CardItem>
             <CardItem style={{backgroundColor: '#fffacd'}}>
               <Left>
-                <Text>{distance} KM</Text>
+                <Text>KM</Text>
               </Left>
               <Body>
                 <Text>{hours}</Text>
@@ -98,38 +97,6 @@ export default class Restaurant extends Component {
             </CardItem>
           </Card>
         </Content>
-        {/* <FlatList
-          data={[
-            {key: this.props.navigation.state.params.id},
-            {key: this.props.navigation.state.params.name},
-            {key: this.props.navigation.state.params.startDay},
-            {key: this.props.navigation.state.params.endDay},
-            {key: this.props.navigation.state.params.startTime},
-            {key: this.props.navigation.state.params.endTime},
-            {key: this.props.navigation.state.params.imgPath}
-          ]}
-          renderItem={
-            ({item}) => {
-              return(
-                <View style={styles.li}>
-                  <Text style={styles.liText}>{item.key}</Text>
-                </View>
-              )
-            }
-          } style={styles.listview}
-        /> */}
-
-        {/* <Image source={{uri: this.state.img}} style={{height: 200, width: null}} />
-        <Text>{distance}</Text>
-        <Button onPress={() =>
-          navigate('MapImage',{
-            //pass the coords of the restaurant to the MapImage component
-            lat: this.state.lat,
-            _long: this.state._long
-          })}
-          title="Show me Map"/> */}
-
-
       </View>
     )
   }

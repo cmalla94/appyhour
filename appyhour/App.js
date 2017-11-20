@@ -10,6 +10,8 @@ import ByLocation from './src/components/Location'
 import Rating from './src/components/Rating'
 import Restaurant from './src/components/Restaurant'
 import MapImage from './src/components/MapImage'
+import RestaurantItem from './src/components/RestaurantItem'
+import Test from './src/components/Test'
 const RootNavigator = StackNavigator({
   Home: {
     screen: HomeScreen,
@@ -19,6 +21,12 @@ const RootNavigator = StackNavigator({
   },
   Rating: {
     screen: Rating
+  },
+  RestaurantItem: {
+    screen: RestaurantItem
+  },
+  Test: {
+    screen: Test
   },
   Restaurant: {
     screen: Restaurant
