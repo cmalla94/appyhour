@@ -6,7 +6,7 @@ import {View,Text} from 'react-native'
 import {StackNavigator} from 'react-navigation'
 
 import HomeScreen from './src/components/HomeScreen'
-import Location from './src/components/Location'
+import ByLocation from './src/components/Location'
 import Rating from './src/components/Rating'
 import Restaurant from './src/components/Restaurant'
 import MapImage from './src/components/MapImage'
@@ -14,8 +14,8 @@ const RootNavigator = StackNavigator({
   Home: {
     screen: HomeScreen,
   },
-  Location: {
-    screen: Location
+  ByLocation: {
+    screen: ByLocation
   },
   Rating: {
     screen: Rating

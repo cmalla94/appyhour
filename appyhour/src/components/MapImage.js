@@ -12,8 +12,8 @@ export default class MapImage extends Component {
     this.state = {
       lat: 37.78825,
       _long: -122.4324,
-      latDelta: 0.0922,
-      longDelta: 0.0421,
+      latDelta: 0.0008,
+      longDelta: 0.0008,
 
     }
   }

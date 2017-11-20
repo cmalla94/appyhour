@@ -7,15 +7,26 @@ import {
   StyleSheet,
   View,
   TouchableHighlight,
-
+  Button,
+  Image,
 } from 'react-native'
+import {
+  Content,
+  Card,
+  CardItem,
+  Thumbnail,
+  Icon,
+  Left,
+  Body,
+  Right,
+} from 'native-base'
 import firebase from '../firebase'
 import {StackNavigator} from 'react-navigation'
 import ListItem from './ListItem'
 import Restaurant from './Restaurant'
 
 
-export default class Location extends Component {
+export default class ByLocation extends Component {
 
   constructor(props){
     super(props)
@@ -32,7 +43,12 @@ export default class Location extends Component {
       endTime: '',
       name: '',
       lat: '',
-      long: ''
+      long: '',
+      myLat: '',
+      myLong: '',
+      imgPath: '',
+      diningIcon: 'https://firebasestorage.googleapis.com/v0/b/appyhour-113cc.appspot.com/o/diningIcon.png?alt=media&token=af5d0eef-7c7b-4bce-82ba-d24aa0ad4d7d',
+
     }
   }
 
@@ -52,7 +68,9 @@ export default class Location extends Component {
           endTime: child.val().endTime,
           id: child.key,
           lat: child.val().lat,
-          long: child.val().long
+          long: child.val().long,
+          imgPath: child.val().imgPath
+
         })
       })
       //each time this function runs
@@ -63,16 +81,29 @@ export default class Location extends Component {
   }
 
   componentDidMount(){
+    //each time component is rendered, listen to firebase and push data into data[]
     this.listenForRestaurants(this.restaurantRef)
+    this.setState({
+      //set the coords for the device, passed in from HomeScreen component
+      myLat: this.props.navigation.state.params.myLat,
+      myLong: this.props.navigation.state.params.myLong
+    })
   }
 
   _keyExtractor(item){
-    console.log(item.id)
     return item.id
   }
 
+
   render(){
     const { navigate } = this.props.navigation
+    // let text = this.state.myLat + ' ' + this.state.myLong //
+    // let distance = geolib.getDistance(
+    //   {latitude: this.state.myLat, longitude: this.state.myLong },
+    //   {latitude: this.props.navigation.state.params.lat, longitude: this.props.navigation.state.params.long}
+    // )
+    // distance = Math.round(distance/1000)
+    // let hours = this.props.navigation.state.params.startTime + ' to ' + this.props.navigation.state.params.endTime;
     return(
       <View style={styles.container}>
         <FlatList
@@ -81,6 +112,7 @@ export default class Location extends Component {
           renderItem={
             ({item}) => {
               return (
+                //to be optimized by only passing in the id to Restaurant component
                 <TouchableHighlight onPress={() =>
                   navigate('Restaurant', {
                       id: item.id,
@@ -90,7 +122,10 @@ export default class Location extends Component {
                       startTime: item.startTime,
                       endTime: item.endTime,
                       lat: item.lat,
-                      long: item.long
+                      long: item.long,
+                      myLat: this.state.myLat,
+                      myLong: this.state.myLong,
+                      imgPath: item.imgPath,
                     })}>
                   <View style={styles.li}>
                     <Text style={styles.liText}>{item.name}</Text>
