@@ -11,7 +11,7 @@ export default class MapImage extends Component {
     super(props)
     this.state = {
       lat: 37.78825,
-      _long: -122.4324,
+      long: -122.4324,
       latDelta: 0.0008,
       longDelta: 0.0008,
 
@@ -23,7 +23,7 @@ export default class MapImage extends Component {
         <MapView style={styles.map}
           initialRegion={{
             latitude: this.props.navigation.state.params.lat,
-            longitude: this.props.navigation.state.params._long,
+            longitude: this.props.navigation.state.params.long,
             latitudeDelta: this.state.latDelta,
             longitudeDelta: this.state.longDelta,
           }}
@@ -31,7 +31,7 @@ export default class MapImage extends Component {
           <MapView.Marker
             coordinate={{
               latitude: this.props.navigation.state.params.lat,
-              longitude: this.props.navigation.state.params._long
+              longitude: this.props.navigation.state.params.long
             }}
           />
         </MapView>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#5ED7FF',
 
   },
   map: {

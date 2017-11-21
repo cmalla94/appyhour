@@ -28,7 +28,15 @@ export default class RestaurantItem extends Component {
     super(props)
   }
   render() {
-
+    const {navigate} = this.props.navigation
+    let data = {
+      name: this.props.name,
+      distance: this.props.distance,
+      hours: this.props.hours,
+      img: this.props.img,
+      lat: this.props.lat,
+      long: this.props.long
+    }
     return (
       <View style={styles.container}>
         <Content>
@@ -56,7 +64,8 @@ export default class RestaurantItem extends Component {
               </Body>
               <Right>
                 {/* //prop: itemPress() function */}
-                <Button onPress={() => {this.props.itemPress}} title="Details" />
+
+                <Button onPress={() => this.props.itemPress(data)} title="Details" />
                 {/* <Button onPress={() =>
                   navigate('MapImage',{
                     //pass the coords of the restaurant to the MapImage component
@@ -74,7 +83,7 @@ export default class RestaurantItem extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#5ED7FF',
     flex: 1,
   },
   liText: {

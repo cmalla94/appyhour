@@ -25,7 +25,9 @@ export default class ByLocation extends Component {
     //this is the json of the Restaurants table in firebase db
     this.restaurantRef = firebase.database().ref().
                           child('Restaurants')
+
     this.state = {
+
       data: [],
       id: '',
       startDay: '',
@@ -82,8 +84,12 @@ export default class ByLocation extends Component {
   _keyExtractor(item){
     return item.id
   }
+
+  //--------------------------------------------------------------------------
+  //RENDER STARTS HERE
   render(){
     const { navigate } = this.props.navigation
+
     let distance = (myLat, myLong, lat, _long) => {
       let theDist = geolib.getDistance(
         {latitude: myLat, longitude: myLong}, {latitude: lat, longitude: _long}
@@ -95,6 +101,13 @@ export default class ByLocation extends Component {
       theHours = start + ' to ' + end
       return theHours
     }
+    let itemPress = (data) =>  {
+      console.log(data);
+      navigate('Restaurant', {
+        data: data
+      })
+    }
+
 
     return(
       <View style={styles.container}>
@@ -115,40 +128,24 @@ export default class ByLocation extends Component {
                   img={item.imgPath}
                   distance={distText}
                   hours={hourText}
-                  itemPress={() => {navigate('Test')}}
+                  lat={item.lat}
+                  long={item.long}
+                  itemPress={itemPress}
                 />
-
-                // <TouchableHighlight onPress={() =>
-                //   navigate('Restaurant', {
-                //       id: item.id,
-                //       name: item.name,
-                //       startDay: item.startDay,
-                //       endDay: item.endDay,
-                //       startTime: item.startTime,
-                //       endTime: item.endTime,
-                //       lat: item.lat,
-                //       long: item.long,
-                //       myLat: this.state.myLat,
-                //       myLong: this.state.myLong,
-                //       imgPath: item.imgPath,
-                //     })}>
-                //   <View style={styles.li}>
-                //     <Text style={styles.liText}>{item.name}</Text>
-                //   </View>
-                // </TouchableHighlight>
               )
             }
           } style={styles.listview}
         />
       </View>
 
-    )
+    );
+
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#5ED7FF',
     flex: 1,
   },
   liContainer: {
