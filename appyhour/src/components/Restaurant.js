@@ -49,11 +49,10 @@ export default class Restaurant extends Component {
   //RENDER STARTS HERE
   render(){
     const { navigate } = this.props.navigation
-    let distance = this.props.navigation.state.params.data.distance
-    // geolib.getDistance(
-    //   {latitude: this.props.navigation.state.params.data.myLat, longitude: this.props.navigation.state.params.data.myLong },
-    //   {latitude: this.props.navigation.state.params.data.lat, longitude: this.props.navigation.state.params.data.long}
-    // )
+    let distance = geolib.getDistance(
+      {latitude: this.props.navigation.state.params.data.myLat, longitude: this.props.navigation.state.params.data.myLong },
+      {latitude: this.props.navigation.state.params.data.lat, longitude: this.props.navigation.state.params.data.long}
+    )
     distance = Math.round(distance/1000)
     let hours = this.props.navigation.state.params.data.hours
     // this.props.navigation.state.params.data.startTime + ' to ' + this.props.navigation.state.params.data.endTime;

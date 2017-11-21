@@ -122,7 +122,7 @@ export default class ByLocation extends Component {
               return (
                 //to be optimized by only passing in the id to Restaurant component
                 <RestaurantItem
-                  navigation={navigate}
+                  // navigation={navigate}
                   name={item.name}
                   icon={this.state.diningIcon}
                   img={item.imgPath}
@@ -131,6 +131,8 @@ export default class ByLocation extends Component {
                   lat={item.lat}
                   long={item.long}
                   itemPress={itemPress}
+                  myLat={this.state.myLat}
+                  myLong={this.state.myLong}
                 />
               )
             }

@@ -28,14 +28,15 @@ export default class RestaurantItem extends Component {
     super(props)
   }
   render() {
-    const {navigate} = this.props.navigation
+    // const {navigate} = this.props.navigation
     let data = {
       name: this.props.name,
-      distance: this.props.distance,
       hours: this.props.hours,
       img: this.props.img,
       lat: this.props.lat,
-      long: this.props.long
+      long: this.props.long,
+      myLat: this.props.myLat,
+      myLong: this.props.myLong
     }
     return (
       <View style={styles.container}>
