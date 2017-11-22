@@ -65,14 +65,7 @@ export default class RestaurantItem extends Component {
               </Body>
               <Right>
                 {/* //prop: itemPress() function */}
-
                 <Button onPress={() => this.props.itemPress(data)} title="Details" />
-                {/* <Button onPress={() =>
-                  navigate('MapImage',{
-                    //pass the coords of the restaurant to the MapImage component
-                    lat: this.state.lat,
-                    _long: this.state._long
-                  })} title="Show Map" /> */}
               </Right>
             </CardItem>
           </Card>

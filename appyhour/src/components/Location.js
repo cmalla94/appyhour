@@ -45,7 +45,7 @@ export default class ByLocation extends Component {
   }
 
   //listener that listens for changes to restaurantRef
-  listenForRestaurants(restaurantRef) {
+  listenForRestaurants(restaurantRef, lat, long) {
     //snapshot is the DatabaseSnapshot from firebase
     restaurantRef.on('value', (snapshot) => {
       //an abitrary array that gets the key values pushed from
@@ -62,25 +62,30 @@ export default class ByLocation extends Component {
           lat: child.val().lat,
           long: child.val().long,
           imgPath: child.val().imgPath
-
         })
       })
+      restaurants.map(i => i.myLat = lat)
+      restaurants.map(v => v.myLong = long)
+      console.log('This is restaurants !!!!!!!');
+      console.log(restaurants);
       //each time this function runs
       //setState for data array to be the restaurants array
       //that gets populated in the for loop
       this.setState({data: restaurants})
     })
   }
-
   componentDidMount(){
-    //each time component is rendered, listen to firebase and push data into data[]
-    this.listenForRestaurants(this.restaurantRef)
+    //location of device passed from HomeScreen
     this.setState({
       //set the coords for the device, passed in from HomeScreen component
       myLat: this.props.navigation.state.params.myLat,
       myLong: this.props.navigation.state.params.myLong
     })
+    //each time component is rendered, listen to firebase and push data into data[]
+    this.listenForRestaurants(this.restaurantRef, this.props.navigation.state.params.myLat, this.props.navigation.state.params.myLong)
   }
+
+  //returns the item's key, used in the renderRow in FlatList
   _keyExtractor(item){
     return item.id
   }
@@ -88,8 +93,36 @@ export default class ByLocation extends Component {
   //--------------------------------------------------------------------------
   //RENDER STARTS HERE
   render(){
+    console.log("THIS IS DATA ARRAY IN LOCATION");
+    console.log(this.state.data[0]);
     const { navigate } = this.props.navigation
-
+    let dataArray = this.state.data
+    let mapped = dataArray.map(function(el, i) {
+      return {index: i, value: geolib.getDistance(
+        {latitude: el.myLat, longitude: el.myLong},
+        {latitude: el.lat, longitude: el.long}
+      )}
+    })
+    console.log("MAPPINGGGGGGGGGGGGGGGGGGGGG");
+    console.log(mapped);
+    mapped.sort(function(a,b){
+      if (a.value > b.value) {
+        return 1
+      }
+      if (a.value < b.value) {
+        return -1
+      }
+      return 0
+    })
+    console.log("MAPPPPPPPPED SORTED");
+    console.log(mapped);
+    let result = mapped.map(function(el){
+      return dataArray[el.index]
+    })
+    console.log("THE MOTHERFUCKING RESULT BITCH");
+    console.log(result);
+    //geolib library method to get distance
+    //distance is called each time a list item is rendered in the flatlist
     let distance = (myLat, myLong, lat, _long) => {
       let theDist = geolib.getDistance(
         {latitude: myLat, longitude: myLong}, {latitude: lat, longitude: _long}
@@ -101,6 +134,8 @@ export default class ByLocation extends Component {
       theHours = start + ' to ' + end
       return theHours
     }
+    //navigate to Restaurant, the params are passed in the
+    //Button component in RestaurantItem component
     let itemPress = (data) =>  {
       console.log(data);
       navigate('Restaurant', {
@@ -108,11 +143,11 @@ export default class ByLocation extends Component {
       })
     }
 
-
+    //let sortedData = geolib.orderByDistance({this.state.myLat, this.state.myLong})
     return(
       <View style={styles.container}>
         <FlatList
-          data={this.state.data}
+          data={result}
           keyExtractor={this._keyExtractor}
           renderItem={
             ({item}) => {
@@ -122,7 +157,6 @@ export default class ByLocation extends Component {
               return (
                 //to be optimized by only passing in the id to Restaurant component
                 <RestaurantItem
-                  // navigation={navigate}
                   name={item.name}
                   icon={this.state.diningIcon}
                   img={item.imgPath}
