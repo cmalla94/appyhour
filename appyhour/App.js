@@ -15,12 +15,21 @@ import Test from './src/components/Test'
 const RootNavigator = StackNavigator({
   Home: {
     screen: HomeScreen,
+    navigationOptions: {
+      title: 'AppyHour'
+    }
   },
   ByLocation: {
-    screen: ByLocation
+    screen: ByLocation,
+    navigationOptions: {
+      title: 'Closest Happy Hours'
+    }
   },
   Rating: {
-    screen: Rating
+    screen: Rating,
+    navigationOptions: {
+      title: 'Highest Rated Happy Hours'
+    }
   },
   RestaurantItem: {
     screen: RestaurantItem

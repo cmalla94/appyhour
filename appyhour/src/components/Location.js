@@ -96,7 +96,10 @@ export default class ByLocation extends Component {
     console.log("THIS IS DATA ARRAY IN LOCATION");
     console.log(this.state.data[0]);
     const { navigate } = this.props.navigation
+    //wouldn't let me pass this.state.data into the result object
+    //making a duplicate copy of the data array obtained from listenForRestaurants
     let dataArray = this.state.data
+    //new mapped array with key:value of index:distanceFromDeviceLocation
     let mapped = dataArray.map(function(el, i) {
       return {index: i, value: geolib.getDistance(
         {latitude: el.myLat, longitude: el.myLong},
@@ -105,6 +108,8 @@ export default class ByLocation extends Component {
     })
     console.log("MAPPINGGGGGGGGGGGGGGGGGGGGG");
     console.log(mapped);
+    //sort the mapped function using javascript's sort,
+    //comparing each value - got it from the MDN docs on sorting arrays
     mapped.sort(function(a,b){
       if (a.value > b.value) {
         return 1
@@ -116,6 +121,7 @@ export default class ByLocation extends Component {
     })
     console.log("MAPPPPPPPPED SORTED");
     console.log(mapped);
+    //again, map the mapped array with each object in dataArray
     let result = mapped.map(function(el){
       return dataArray[el.index]
     })
