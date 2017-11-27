@@ -14,7 +14,7 @@ import firebase from '../firebase'
 import {StackNavigator} from 'react-navigation'
 import RestaurantItem from './RestaurantItem'
 import Restaurant from './Restaurant'
-import Test from './Test'
+
 
 
 export default class ByLocation extends Component {
@@ -39,6 +39,7 @@ export default class ByLocation extends Component {
       long: '',
       myLat: '',
       myLong: '',
+      address: '',
       diningIcon: 'https://firebasestorage.googleapis.com/v0/b/appyhour-113cc.appspot.com/o/diningIcon.png?alt=media&token=af5d0eef-7c7b-4bce-82ba-d24aa0ad4d7d',
 
     }
@@ -47,7 +48,7 @@ export default class ByLocation extends Component {
   //listener that listens for changes to restaurantRef
   listenForRestaurants(restaurantRef, lat, long) {
     //snapshot is the DatabaseSnapshot from firebase
-    restaurantRef.on('value', (snapshot) => {
+    restaurantRef.once('value', (snapshot) => {
       //an abitrary array that gets the key values pushed from
       //the DatabaseSnapshot
       var restaurants = [];
@@ -61,7 +62,8 @@ export default class ByLocation extends Component {
           id: child.key,
           lat: child.val().lat,
           long: child.val().long,
-          imgPath: child.val().imgPath
+          imgPath: child.val().imgPath,
+          address: child.val().address
         })
       })
       restaurants.map(i => i.myLat = lat)
@@ -89,6 +91,8 @@ export default class ByLocation extends Component {
   _keyExtractor(item){
     return item.id
   }
+
+
 
   //--------------------------------------------------------------------------
   //RENDER STARTS HERE
@@ -119,7 +123,7 @@ export default class ByLocation extends Component {
     let result = mapped.map(function(el){
       return dataArray[el.index]
     })
-    console.log("THE MOTHERFUCKING RESULT BITCH");
+    console.log("RESULTTTTTTT");
     console.log(result);
     //geolib library method to get distance
     //distance is called each time a list item is rendered in the flatlist
@@ -142,7 +146,6 @@ export default class ByLocation extends Component {
         data: data
       })
     }
-
     //let sortedData = geolib.orderByDistance({this.state.myLat, this.state.myLong})
     return(
       <View style={styles.container}>
@@ -155,23 +158,23 @@ export default class ByLocation extends Component {
                 this.state.myLat, this.state.myLong, item.lat, item.long)
               let hourText = hours(item.startTime, item.endTime)
               return (
-                //to be optimized by only passing in the id to Restaurant component
-                <RestaurantItem
-                  name={item.name}
-                  icon={this.state.diningIcon}
-                  img={item.imgPath}
-                  distance={distText}
-                  hours={hourText}
-                  lat={item.lat}
-                  long={item.long}
-                  itemPress={itemPress}
-                  myLat={this.state.myLat}
-                  myLong={this.state.myLong}
-                />
-              )
-            }
-          } style={styles.listview}
-        />
+                  //to be optimized by only passing in the id to Restaurant component
+                  <RestaurantItem
+                    name={item.name}
+                    icon={this.state.diningIcon}
+                    img={item.imgPath}
+                    distance={distText}
+                    hours={hourText}
+                    lat={item.lat}
+                    long={item.long}
+                    itemPress={itemPress}
+                    myLat={this.state.myLat}
+                    myLong={this.state.myLong}
+                  />
+                )
+              }
+            } style={styles.listview}
+          />
       </View>
 
     );

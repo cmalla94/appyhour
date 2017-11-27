@@ -13,6 +13,7 @@ import Rating from './Rating'
 
 
 
+
 //HomeScreen component
 export default class HomeScreen extends Component {
   state = {
