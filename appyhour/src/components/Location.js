@@ -55,7 +55,7 @@ export default class ByLocation extends Component {
       snapshot.forEach((child) => {
         restaurantIDs.push(child.key)
       })
-      restaurantIDs.forEach((ID) => console.log("The restaurant id is: " + ID))
+      //restaurantIDs.forEach((ID) => console.log("The restaurant id is: " + ID))
       //loop through the restaurantIDs array
       restaurantIDs.forEach((ID) => {
         //this will be a snapshot of Restaurants/ID
