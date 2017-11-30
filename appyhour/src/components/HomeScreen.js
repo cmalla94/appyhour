@@ -10,6 +10,8 @@ import { Constants, Location, Permissions} from 'expo'
 import {Button} from 'native-base'
 import ByLocation from './Location'
 import Rating from './Rating'
+import Test from './Test'
+
 
 
 
@@ -72,6 +74,9 @@ export default class HomeScreen extends Component {
             </Button>
             <Button full primary onPress={()=> navigate('Rating')} title="Search By Rating">
               <Text>Search by Ratings</Text>
+            </Button>
+            <Button full danger onPress={() => navigate('Test')} title="Testing Page">
+              <Text> Testing Page </Text>
             </Button>
         </View>
       </Image>

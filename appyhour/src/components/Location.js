@@ -14,7 +14,7 @@ import firebase from '../firebase'
 import {StackNavigator} from 'react-navigation'
 import RestaurantItem from './RestaurantItem'
 import Restaurant from './Restaurant'
-import Test from './Test'
+
 
 
 export default class ByLocation extends Component {
@@ -23,8 +23,12 @@ export default class ByLocation extends Component {
     super(props)
 
     //this is the json of the Restaurants table in firebase db
-    this.restaurantRef = firebase.database().ref().
-                          child('Restaurants')
+    //*******UN COMMENT IF THE HOURS REF WAY DOESNT WORK*********//
+    // this.restaurantRef = firebase.database().ref().
+    //                       child('Restaurants')
+    //*********************************************************//
+    this.hoursRef = firebase.database().ref().
+                      child('Hours/17/members')
 
     this.state = {
 
@@ -43,37 +47,76 @@ export default class ByLocation extends Component {
 
     }
   }
-
+  //NEW METHOD FOR LISTENING TO Restaurants
+  listenForHours(hoursRef, lat, long) {
+    hoursRef.on('value', (snapshot) => {
+      var restaurantIDs = []
+      var restaurants = []
+      snapshot.forEach((child) => {
+        restaurantIDs.push(child.key)
+      })
+      //restaurantIDs.forEach((ID) => console.log("The restaurant id is: " + ID))
+      //loop through the restaurantIDs array
+      restaurantIDs.forEach((ID) => {
+        //this will be a snapshot of Restaurants/ID
+        firebase.database().ref('Restaurants/' + ID).on(
+          'value', (snapshot) => {
+            console.log("this is snapshot.name " + snapshot.val().name)
+            restaurants.push({
+              name: snapshot.val().name,
+              startDay: snapshot.val().startDay,
+              endDay: snapshot.val().endDay,
+              startTime: snapshot.val().startTime,
+              endTime: snapshot.val().endTime,
+              id: snapshot.key,
+              lat: snapshot.val().lat,
+              long: snapshot.val().long,
+              imgPath: snapshot.val().imgPath
+           })
+           restaurants.map(i => i.myLat = lat)
+           restaurants.map(v => v.myLong = long)
+           this.setState({data: restaurants})
+        })
+        console.log("this is the restaurants array after each push: " + restaurants)
+      })
+      console.log("This is the restaurants array: ......... " + restaurants);
+    })
+  }
   //listener that listens for changes to restaurantRef
-  listenForRestaurants(restaurantRef, lat, long) {
+  // listenForRestaurants(restaurantRef, lat, long) {
     //snapshot is the DatabaseSnapshot from firebase
-    restaurantRef.on('value', (snapshot) => {
+    // restaurantRef.once('value', (snapshot) => {
       //an abitrary array that gets the key values pushed from
       //the DatabaseSnapshot
-      var restaurants = [];
-      snapshot.forEach((child) => {
-        restaurants.push({
-          name: child.val().name,
-          startDay: child.val().startDay,
-          endDay: child.val().endDay,
-          startTime: child.val().startTime,
-          endTime: child.val().endTime,
-          id: child.key,
-          lat: child.val().lat,
-          long: child.val().long,
-          imgPath: child.val().imgPath
-        })
-      })
-      restaurants.map(i => i.myLat = lat)
-      restaurants.map(v => v.myLong = long)
-      console.log('This is restaurants !!!!!!!');
-      console.log(restaurants);
+      //*********UNCOMMENT CODE FOR BEFORE HOURS BRANCH****//
+      // var restaurants = [];
+      // snapshot.forEach((child) => {
+      //   restaurants.push({
+      //     name: child.val().name,
+      //     startDay: child.val().startDay,
+      //     endDay: child.val().endDay,
+      //     startTime: child.val().startTime,
+      //     endTime: child.val().endTime,
+      //     id: child.key,
+      //     lat: child.val().lat,
+      //     long: child.val().long,
+      //     imgPath: child.val().imgPath,
+      //     address: child.val().address
+      //   })
+      // })
+      // restaurants.map(i => i.myLat = lat)
+      // restaurants.map(v => v.myLong = long)
+      // console.log('This is restaurants !!!!!!!');
+      // console.log(restaurants);
+      //***************************************************//
       //each time this function runs
       //setState for data array to be the restaurants array
       //that gets populated in the for loop
-      this.setState({data: restaurants})
-    })
-  }
+      //*********UNCOMMENT CODE FOR BEFORE HOURS BRANCH****//
+  //     this.setState({data: restaurants})
+  //   })
+  // }
+  //*********************************************************//
   componentDidMount(){
     //location of device passed from HomeScreen
     this.setState({
@@ -82,13 +125,15 @@ export default class ByLocation extends Component {
       myLong: this.props.navigation.state.params.myLong
     })
     //each time component is rendered, listen to firebase and push data into data[]
-    this.listenForRestaurants(this.restaurantRef, this.props.navigation.state.params.myLat, this.props.navigation.state.params.myLong)
+    this.listenForHours(this.hoursRef, this.props.navigation.state.params.myLat, this.props.navigation.state.params.myLong)
   }
 
   //returns the item's key, used in the renderRow in FlatList
   _keyExtractor(item){
     return item.id
   }
+
+
 
   //--------------------------------------------------------------------------
   //RENDER STARTS HERE
@@ -125,7 +170,7 @@ export default class ByLocation extends Component {
     let result = mapped.map(function(el){
       return dataArray[el.index]
     })
-    console.log("THE MOTHERFUCKING RESULT BITCH");
+    console.log("RESULTTTTTTT");
     console.log(result);
     //geolib library method to get distance
     //distance is called each time a list item is rendered in the flatlist
@@ -148,7 +193,6 @@ export default class ByLocation extends Component {
         data: data
       })
     }
-
     //let sortedData = geolib.orderByDistance({this.state.myLat, this.state.myLong})
     return(
       <View style={styles.container}>
@@ -161,23 +205,23 @@ export default class ByLocation extends Component {
                 this.state.myLat, this.state.myLong, item.lat, item.long)
               let hourText = hours(item.startTime, item.endTime)
               return (
-                //to be optimized by only passing in the id to Restaurant component
-                <RestaurantItem
-                  name={item.name}
-                  icon={this.state.diningIcon}
-                  img={item.imgPath}
-                  distance={distText}
-                  hours={hourText}
-                  lat={item.lat}
-                  long={item.long}
-                  itemPress={itemPress}
-                  myLat={this.state.myLat}
-                  myLong={this.state.myLong}
-                />
-              )
-            }
-          } style={styles.listview}
-        />
+                  //to be optimized by only passing in the id to Restaurant component
+                  <RestaurantItem
+                    name={item.name}
+                    icon={this.state.diningIcon}
+                    img={item.imgPath}
+                    distance={distText}
+                    hours={hourText}
+                    lat={item.lat}
+                    long={item.long}
+                    itemPress={itemPress}
+                    myLat={this.state.myLat}
+                    myLong={this.state.myLong}
+                  />
+                )
+              }
+            } style={styles.listview}
+          />
       </View>
 
     );

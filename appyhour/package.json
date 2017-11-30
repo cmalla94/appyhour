@@ -11,8 +11,9 @@
     "react": "16.0.0-beta.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-22.0.2.tar.gz",
     "react-native-base": "^1.1.0",
-    "react-navigation": "^1.0.0-beta.19",
-    "typeface-roboto": "0.0.45"
+    "react-native-foursquare-api": "0.0.4",
+    "react-native-google-places-web": "0.0.5",
+    "react-navigation": "^1.0.0-beta.19"
   },
   "name": "appyhour",
   "version": "0.0.0",
