@@ -65,7 +65,7 @@ export default class HomeScreen extends Component {
       //   <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',}}>
       <Image style={styles.backgroundImage} source={{ uri: this.state.backgroundUrl }}>
         {/* </View> */}
-        <View style={{flex: 1, backgroundColor: 'transparent', justifyContent: 'space-around', alignItems: 'center'}}>
+        <View style={{flex: 1, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center'}}>
             <Button full success onPress={()=> navigate('ByLocation', {
               myLat: this.state.myLat,
               myLong: this.state.myLong
