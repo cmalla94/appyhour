@@ -33,6 +33,7 @@ export default class ByLocation extends Component {
     this.state = {
 
       data: [],
+      foursquareDetails: [],
       id: '',
       startDay: '',
       endDay: '',
@@ -47,31 +48,58 @@ export default class ByLocation extends Component {
 
     }
   }
+
   //NEW METHOD FOR LISTENING TO Restaurants
   listenForHours(hoursRef, lat, long) {
     hoursRef.on('value', (snapshot) => {
       var restaurantIDs = []
       var restaurants = []
+      var foursquareDetails = []
       snapshot.forEach((child) => {
         restaurantIDs.push(child.key)
+        console.log("hoursRef.on method..... done")
       })
       //restaurantIDs.forEach((ID) => console.log("The restaurant id is: " + ID))
       //loop through the restaurantIDs array
+      //api configurations
+
+      let venueEndPoint = 'https://api.foursquare.com/v2/venues/'
+      let config = 'client_id=HATDNQSDKZP0CBNXS1MFPY5LHNIWRUO20ABSN200332SSTJS&client_secret=PG1CZTXS5TL5ECZGFOLCSZQDLNRCAUC4BYJ0K1WL3ZAMTQ4P&v=20170801'
+      console.log("this is restaurantIDs.length: " + restaurantIDs.length)
+      restaurantIDs.forEach(async (ID) => {
+        console.log("starting the api call thread........")
+        //lets iterate and push the data into a temp array
+        let res = await fetch(venueEndPoint + ID + '?' + config)
+        let resJson = await res.json()
+        console.log("resJson = " + resJson.response.venue.name);
+        foursquareDetails.push({
+          name: resJson.response.venue.name,
+          lat: resJson.response.venue.location.lat,
+          long: resJson.response.venue.location.lng
+        })
+        console.log("this is foursquareDetails.length: " + foursquareDetails.length)
+      })
+
+
       restaurantIDs.forEach((ID) => {
-        //this will be a snapshot of Restaurants/ID
-        firebase.database().ref('Restaurants/' + ID).on(
+        //this will be a snapshot of VenueIDs/
+        firebase.database().ref('VenueIDs/' + ID).on(
           'value', (snapshot) => {
-            console.log("this is snapshot.name " + snapshot.val().name)
+            //let venueDetails = await foursquareDetails.shift()
+            console.log("this is foursquare.shift() : " + foursquareDetails);
             restaurants.push({
-              name: snapshot.val().name,
+              //name: snapshot.val().name,
               startDay: snapshot.val().startDay,
               endDay: snapshot.val().endDay,
               startTime: snapshot.val().startTime,
               endTime: snapshot.val().endTime,
               id: snapshot.key,
-              lat: snapshot.val().lat,
-              long: snapshot.val().long,
-              imgPath: snapshot.val().imgPath
+              name: "test",
+              lat: 11,
+              long: 12
+              //lat: snapshot.val().lat,
+              //long: snapshot.val().long,
+              //imgPath: snapshot.val().imgPath
            })
            restaurants.map(i => i.myLat = lat)
            restaurants.map(v => v.myLong = long)
@@ -82,6 +110,7 @@ export default class ByLocation extends Component {
       console.log("This is the restaurants array: ......... " + restaurants);
     })
   }
+
   //listener that listens for changes to restaurantRef
   // listenForRestaurants(restaurantRef, lat, long) {
     //snapshot is the DatabaseSnapshot from firebase
@@ -126,6 +155,7 @@ export default class ByLocation extends Component {
     })
     //each time component is rendered, listen to firebase and push data into data[]
     this.listenForHours(this.hoursRef, this.props.navigation.state.params.myLat, this.props.navigation.state.params.myLong)
+
   }
 
   //returns the item's key, used in the renderRow in FlatList

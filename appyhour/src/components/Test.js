@@ -18,6 +18,9 @@ export default class Test extends Component{
     this.FourSquareVenueIDRef = firebase.database()
       .ref().child('VenueIDs')
     this.venueID = '4b77ba28f964a52064a82ee3'
+    this.state = {
+      params: {}
+    }
   }
   //Getting the IDs from the table in firebase
   listenForVenues(FourSquareVenueIDRef) {
@@ -33,32 +36,31 @@ export default class Test extends Component{
     })
   }
   //pass in the venueID and try to fetch from foursquare api
-  getVenueDetails(venueID){
+  async getVenueDetails(venueID){
     let venueEndPoint = 'https://api.foursquare.com/v2/venues/'
     let VENUE_ID = venueID
-    const params = 'client_id=HATDNQSDKZP0CBNXS1MFPY5LHNIWRUO20ABSN200332SSTJS&client_secret=PG1CZTXS5TL5ECZGFOLCSZQDLNRCAUC4BYJ0K1WL3ZAMTQ4P&v=20170801'
-    // const params = {
-    //   clientID: 'HATDNQSDKZP0CBNXS1MFPY5LHNIWRUO20ABSN200332SSTJS',
-    //   clientSecret: 'PG1CZTXS5TL5ECZGFOLCSZQDLNRCAUC4BYJ0K1WL3ZAMTQ4P',
-    //   style: 'foursquare', // default: 'foursquare'
-    //   version: '20170801', //  default: '20140806'
-    //   VENUE_ID: '4b77ba28f964a52064a82ee3'
-    // }
-    fetch(venueEndPoint + VENUE_ID + '?' + params)
-      .then(response => response.json())
-        .then((responseJson) => console.log(responseJson.response.venue.name))
+    const config = 'client_id=HATDNQSDKZP0CBNXS1MFPY5LHNIWRUO20ABSN200332SSTJS&client_secret=PG1CZTXS5TL5ECZGFOLCSZQDLNRCAUC4BYJ0K1WL3ZAMTQ4P&v=20170801'
+    const res = await fetch(venueEndPoint + VENUE_ID + '?' + config)
+    const resJson = await res.json()
+    console.log(resJson)
+    const params = {
+      name: resJson.response.venue.name,
+      lat: resJson.response.venue.location.lat,
+      long: resJson.response.venue.location.lng
+    }
+    console.log(params)
+    this.setState({params: params})
   }
-
-
-  componentDidMount(){
-    //this.listenForVenues(this.FourSquareVenueIDRef)
+  componentDidMount() {
     this.getVenueDetails(this.venueID)
-
   }
   render(){
+    let result = this.state.params.name
+
+    console.log(result)
     return(
       <View>
-        <Text>TEST</Text>
+        <Text>{result}</Text>
       </View>
     )
   }
