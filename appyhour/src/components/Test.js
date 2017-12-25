@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
 } from 'react-native'
+import {Spinner} from 'native-base'
 import firebase from '../firebase'
 import RestaurantItem from './RestaurantItem'
 
@@ -21,33 +22,38 @@ export default class Test extends Component{
       .ref().child('VenueIDs')
     this.venueID = '4b77ba28f964a52064a82ee3'
     this.state = {
-      data: []
+      data: [],
+      loaded: false,
     }
   }
   //Getting the IDs from the table in firebase
   listenForVenues(FourSquareVenueIDRef) {
-    var IDArray = []
+    let IDArray = []
     FourSquareVenueIDRef.on('value',
     (snapshot) => {
       //for loop starts
       snapshot.forEach((child) => {
+        //console.log("this is the child.key in first loop : " + child.key);
         IDArray.push(child.key)
       })
-    console.log("The IDArray is:  " + IDArray)
+    //console.log("The IDArray is:  " + IDArray)
     let venueEndPoint = 'https://api.foursquare.com/v2/venues/'
     const config = 'client_id=HATDNQSDKZP0CBNXS1MFPY5LHNIWRUO20ABSN200332SSTJS&client_secret=PG1CZTXS5TL5ECZGFOLCSZQDLNRCAUC4BYJ0K1WL3ZAMTQ4P&v=20170801'
     let data = []
-    console.log("Why doesnt the loop run???");
     IDArray.forEach(async (id) => {
       console.log("Trying to fetch data for : " + id);
       const res = await fetch(venueEndPoint + id + '?' + config)
       const resJson = await res.json()
       console.log("The venue name is : " + resJson.response.venue.name);
-      data.push({
+      await data.push({
         id: id,
         name: resJson.response.venue.name
       })
-      this.setState({data: data})
+      data.length === IDArray.length ? this.setState({
+        data: data,
+        loaded: true
+
+      }) : null
     })
   }
 )}
@@ -61,9 +67,12 @@ _keyExtractor(item){
   }
   render(){
     let dataArray = this.state.data
+    this.state.loaded ? console.log(this.state.loaded) : null
+    this.state.loaded ? console.log(this.state.data) : null
+
     return(
       <View style={styles.container}>
-        <FlatList
+        { this.state.loaded ? (<FlatList
           data={dataArray}
           keyExtractor={this._keyExtractor}
           renderItem={
@@ -73,7 +82,7 @@ _keyExtractor(item){
                   name={item.name}
                   // icon={this.state.diningIcon}
                   // img={item.imgPath}
-                  // distance={distText}
+                  distance={this.state.loaded}
                   // hours={hourText}
                   // lat={item.lat}
                   // long={item.long}
@@ -84,8 +93,7 @@ _keyExtractor(item){
               )
             }
           } style={styles.listview}
-
-          />
+        /> ): (<Spinner color="green" />) }
       </View>
     )
   }
