@@ -5,6 +5,8 @@
     "expo": "^22.0.4",
     "firebase": "^4.6.2",
     "geolib": "^2.0.24",
+    "material-ui": "^1.0.0-beta.21",
+    "material-ui-icons": "^1.0.0-beta.17",
     "native-base": "^2.3.3",
     "react": "16.0.0-beta.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-22.0.2.tar.gz",

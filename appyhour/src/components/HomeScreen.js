@@ -17,6 +17,7 @@ import Test from './Test'
 
 //HomeScreen component
 export default class HomeScreen extends Component {
+  const
   state = {
     myLat: null, //pass to Location component
     myLong: null, //pass to Location component
