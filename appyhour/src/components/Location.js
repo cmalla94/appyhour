@@ -31,12 +31,9 @@ export default class ByLocation extends Component {
     this.hoursRef = firebase.database().ref().
                       child('Hours/17/members')
     this.state = {
-      mergeData: [],
       data: [],
       foursquareArray: [],
       foursquareLoaded: false,
-      dataMerged: false,
-      readyToRender: false,
       id: '',
       startDay: '',
       endDay: '',
@@ -95,14 +92,17 @@ export default class ByLocation extends Component {
       IDArray.forEach(async (id) => {
         const res = await fetch(venueEndPoint + id + '?' + config)
         const resJson = await res.json()
-        console.log("resJson.response.venue.name: ====== " + resJson.response.venue.name)
+        console.log("resJson.response.venue.photos.groups[0]: ====== " + resJson.response.venue.photos.groups[0].items[0].suffix)
         await foursquareArray.push({
           id: id,
           name: resJson.response.venue.name,
           lat: resJson.response.venue.location.lat,
-          long: resJson.response.venue.location.lng
+          long: resJson.response.venue.location.lng,
+          prefix: resJson.response.venue.photos.groups[0].items[3].prefix,
+          suffix: resJson.response.venue.photos.groups[0].items[3].suffix
         })
         foursquareArray.length === IDArray.length ? this.setState({
+
           foursquareArray: foursquareArray,
           foursquareLoaded: true
         }) : null
@@ -179,7 +179,36 @@ export default class ByLocation extends Component {
     //console.log(merged)
     return merged
   }
-
+  //SORT ARRAY FUNCTION
+  sortData(arr, sortedArr, renderBool) {
+    let data = arr
+    // console.log("DATA ARRAY AFTER BEING MERGEDDDDDDDDD!!!!!!");
+    // console.log(data)
+    //console.log("END=======================================");
+    let mapped = data.map(function(el, i) {
+      return {index: i, value: geolib.getDistance(
+        {latitude: el.myLat, longitude: el.myLong},
+        {latitude: el.lat, longitude: el.long}
+      )}
+    })
+    //console.log("MAPPINGGGGGGGGGGGGGGGGGGGGG");
+    //console.log(mapped)
+    mapped.sort(function(a,b){
+      if (a.value > b.value) {
+        return 1
+      }
+      if (a.value < b.value) {
+        return -1
+      }
+      return 0
+    })
+    //console.log("MAPPPPPPPPED SORTED");
+    //console.log(mapped);
+    sortedArr = mapped.map(function(obj){
+      return data[obj.index]
+    })
+    renderBool = sortedArr.length === data.length ? true : false
+  }
   //COMPONET DID MOUNT : :
   componentDidMount(){
     console.log("componentDidMount")
@@ -206,17 +235,17 @@ export default class ByLocation extends Component {
     //SORT ARRAY BY DISTANCE---------------------------------------------------
     if(dataMerged){
       let data = dataMerged
-      console.log("DATA ARRAY AFTER BEING MERGEDDDDDDDDD!!!!!!");
-      console.log(data)
-      console.log("END=======================================");
+      // console.log("DATA ARRAY AFTER BEING MERGEDDDDDDDDD!!!!!!");
+      // console.log(data)
+      // console.log("END=======================================");
       let mapped = data.map(function(el, i) {
         return {index: i, value: geolib.getDistance(
           {latitude: el.myLat, longitude: el.myLong},
           {latitude: el.lat, longitude: el.long}
         )}
       })
-      console.log("MAPPINGGGGGGGGGGGGGGGGGGGGG");
-      console.log(mapped)
+      // console.log("MAPPINGGGGGGGGGGGGGGGGGGGGG");
+      // console.log(mapped)
       mapped.sort(function(a,b){
         if (a.value > b.value) {
           return 1
@@ -245,22 +274,32 @@ export default class ByLocation extends Component {
       console.log(theDist);
     }
     let hours = (start, end) => {
-      theHours = start + ' to ' + end
+      let startHour = start.substring(0,2) - 12
+      let endHour = end.substring(0,2) - 12
+      let theHours = startHour + ' PM to ' + endHour + ' PM'
       return theHours
     }
 
       //navigate to Restaurant, the params are passed in the
       //Button component in RestaurantItem component
     let itemPress = (data) =>  {
-      console.log(data);
+      console.log(data)
       navigate('Restaurant', {
         data: data
       })
     }
+    let imgURL = (prefix, suffix) => {
+        console.log(prefix + '500x500' + suffix)
+        return prefix + '300x300' + suffix
+    }
     //let sortedData = geolib.orderByDistance({this.state.myLat, this.state.myLong})
     return(
       <View style={styles.container}>
-        { !readyToRender ? (<Spinner color="green" />)
+        { !readyToRender ? (
+          <View style={{flex: 1, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center'}}>
+            <Spinner color="green" />
+            <Text> LOADING PLEASE WAIT </Text>
+          </View>)
           : (<FlatList
             data={result}
             keyExtractor={this._keyExtractor}
@@ -269,12 +308,13 @@ export default class ByLocation extends Component {
                 let distText = distance(
                   this.state.myLat, this.state.myLong, item.lat, item.long)
                 let hourText = hours(item.startTime, item.endTime)
+                let url = imgURL(item.prefix, item.suffix)
                 return (
                   //to be optimized by only passing in the id to Restaurant component
                   <RestaurantItem
                     name={item.name}
                     icon={this.state.diningIcon}
-                    img={this.state.diningIcon}
+                    img={url}
                     distance={distText}
                     hours={hourText}
                     lat={item.lat}

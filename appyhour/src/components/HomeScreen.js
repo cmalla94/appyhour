@@ -64,19 +64,19 @@ export default class HomeScreen extends Component {
       //   <View style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',}}>
       <Image style={styles.backgroundImage} source={{ uri: this.state.backgroundUrl }}>
         {/* </View> */}
-        <View style={{flex: 1, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center'}}>
-            <Button full success onPress={()=> navigate('ByLocation', {
+        <View style={{flex: 1, backgroundColor: 'transparent', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+            <Button rounded success full success onPress={()=> navigate('ByLocation', {
               myLat: this.state.myLat,
               myLong: this.state.myLong
             })}>
               <Text>Search by Location</Text>
             </Button>
-            <Button full primary onPress={()=> navigate('Rating')} title="Search By Rating">
+            {/* <Button full primary onPress={()=> navigate('Rating')} title="Search By Rating">
               <Text>Search by Ratings</Text>
             </Button>
-            <Button full danger onPress={() => navigate('Test')} title="Testing Page">
-              <Text> Testing Page </Text>
-            </Button>
+            <Button full danger onPress={() => navigate('Test')} title="Testing Page"> */}
+              {/* <Text> Testing Page </Text>
+            </Button> */}
         </View>
       </Image>
 
