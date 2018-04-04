@@ -11,5 +11,5 @@ More features to come!
 
 AppyHour uses the [Foursquare](https://developer.foursquare.com/places-api) API to gather images and reviews.
 
-AppyHour is written using [React Native](https://facebook.github.io/react-native/) and [JSON](https://www.json.org/).
+AppyHour is written using [React Native](https://facebook.github.io/react-native/) and [Firebase](https://firebase.google.com/products/realtime-database/).
 
