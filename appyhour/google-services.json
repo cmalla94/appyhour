@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "331412788676",
+    "firebase_url": "https://appyhour-113cc.firebaseio.com",
+    "project_id": "appyhour-113cc",
+    "storage_bucket": "appyhour-113cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331412788676:android:af36e75bbe2444fc",
+        "android_client_info": {
+          "package_name": "com.example.cmalla.timer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331412788676-re5ufjiefdbr3s56qsfb529g4qk5f6kc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cmalla.timer",
+            "certificate_hash": "4460189de8f46e8509c9bd92a960a89f4049e1c0"
+          }
+        },
+        {
+          "client_id": "331412788676-ve90qerce0sr0jrmh50ga3sbqm00e1lg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAej8Utc0SJFluXKTM-zz47awIslTXVVls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331412788676-ve90qerce0sr0jrmh50ga3sbqm00e1lg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

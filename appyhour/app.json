@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "appyhour",
-    "description": "An empty new project",
+    "description": "Find the local Happy Hour offerings",
     "slug": "appyhour",
     "privacy": "public",
-    "sdkVersion": "22.0.0",
+    "sdkVersion": "32.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",

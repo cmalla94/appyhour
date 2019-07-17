@@ -2,21 +2,27 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "dependencies": {
-    "expo": "^22.0.4",
-    "firebase": "^4.6.2",
+    "expo": "^32.0.0",
+    "firebase": "^4.6.1",
     "geolib": "^2.0.24",
+    "google-places-web": "0.3.0",
+    "grpc": "^1.22.2",
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.17",
     "native-base": "^2.3.3",
-    "react": "16.0.0-beta.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-22.0.2.tar.gz",
+    "react": "^16.0.0-alpha.6",
+    "react-dom": "^15.0.0",
+    "react-native": "^0.60.0",
     "react-native-base": "^1.1.0",
     "react-native-foursquare-api": "0.0.4",
-    "react-native-google-places-web": "0.0.5",
-    "react-navigation": "^1.0.0-beta.19"
+    "react-navigation": "^3.11.1",
+    "webpack": "^3.12.0"
   },
   "name": "appyhour",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Hello Expo!",
-  "author": null
+  "author": "Chad Malla",
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^3.2.0"
+  }
 }
